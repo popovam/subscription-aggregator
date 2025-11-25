@@ -24,11 +24,13 @@ public class SubscriptionService
     public SubscriptionService(
         TopicRepository topicRepository, 
         TariffService tariffService, 
-        SubscriptionRepository subscriptionRepository)
+        SubscriptionRepository subscriptionRepository, 
+        ServiceRepository serviceRepository)
     {
         _topicRepository = topicRepository;
         _tariffService = tariffService;
         _subscriptionRepository = subscriptionRepository;
+        _serviceRepository = serviceRepository;
     }
 
     private readonly IMapper _mapper = MapperProvider.Provider.GetMapper();

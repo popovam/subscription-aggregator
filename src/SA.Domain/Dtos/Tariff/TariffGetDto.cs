@@ -1,22 +1,20 @@
-using System.ComponentModel.DataAnnotations;
+using SA.Domain.Dtos.Service;
 
-namespace SA.Domain.Entities;
+namespace SA.Domain.Dtos.Tariff;
 
 /// <summary>
-/// Тариф
+/// Dto для получения тарифа
 /// </summary>
-public class Tariff
+public class TariffGetDto : IDto
 {
     /// <summary>
     /// Идентификатор
     /// </summary>
-    [Key]
     public long Id { get; set; }
 
     /// <summary>
     /// Название
     /// </summary>
-    [MaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
@@ -25,12 +23,7 @@ public class Tariff
     public decimal Price { get; set; }
 
     /// <summary>
-    /// Сервис по подписке
-    /// </summary>
-    public Subscription Subscription { get; set; }
-
-    /// <summary>
     /// Услуги
     /// </summary>
-    public ICollection<Service> Services { get; set; } = new List<Service>();
+    public ICollection<ServiceGetDto>? Services { get; set; }
 }

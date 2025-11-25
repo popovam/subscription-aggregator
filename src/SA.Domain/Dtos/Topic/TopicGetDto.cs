@@ -1,30 +1,21 @@
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using SA.Domain.Dtos.Subscription;
 
-namespace SA.Domain.Entities;
+namespace SA.Domain.Dtos.Topic;
 
 /// <summary>
-/// Тема
+/// Dto для получения темы
 /// </summary>
-[Index(nameof(Name), IsUnique = true)]
-public class Topic
+public class TopicGetDto : IDto
 {
     /// <summary>
     /// Идентификатор
     /// </summary>
-    [Key]
     public long Id { get; set; }
 
     /// <summary>
     /// Название
     /// </summary>
-    [MaxLength(100)]
     public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Рейтинг
-    /// </summary>
-    public decimal Rating { get; set; }
 
     /// <summary>
     /// Изображение
@@ -34,5 +25,5 @@ public class Topic
     /// <summary>
     /// Сервисы по подписке
     /// </summary>
-    public ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+    public ICollection<SubscriptionGetDto>? Subscriptions { get; set; }
 }

@@ -17,13 +17,13 @@ public class Subscription
     /// Название
     /// </summary>
     [MaxLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Ссылка на сервис
     /// </summary>
     [MaxLength(500)]
-    public required string Link { get; set; }
+    public string Link { get; set; } = string.Empty;
 
     /// <summary>
     /// Изображение
@@ -33,7 +33,7 @@ public class Subscription
     /// <summary>
     /// Тема
     /// </summary>
-    public required Topic Topic { get; set; }
+    public Topic Topic { get; set; }
 
     /// <summary>
     /// Тарифы

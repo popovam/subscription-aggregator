@@ -1,33 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace SA.Domain.Entities;
+namespace SA.Domain.Dtos.Service;
 
 /// <summary>
-/// Услуга
+/// Dto для получения услуги
 /// </summary>
-public class Service
+public class ServiceGetDto : IDto
 {
     /// <summary>
     /// Идентификатор
     /// </summary>
-    [Key]
     public long Id { get; set; }
 
     /// <summary>
     /// Название
     /// </summary>
-    [MaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Значение
     /// </summary>
-    [MaxLength(100)]
     public string Value { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Тариф
-    /// </summary>
-    public Tariff Tariff { get; set; }
 }

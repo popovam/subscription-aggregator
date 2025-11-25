@@ -1,30 +1,26 @@
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using SA.Domain.Dtos.Tariff;
 
-namespace SA.Domain.Entities;
+namespace SA.Domain.Dtos.Subscription;
 
 /// <summary>
-/// Тема
+/// Dto для получения подписки
 /// </summary>
-[Index(nameof(Name), IsUnique = true)]
-public class Topic
+public class SubscriptionGetDto : IDto
 {
     /// <summary>
     /// Идентификатор
     /// </summary>
-    [Key]
     public long Id { get; set; }
 
     /// <summary>
     /// Название
     /// </summary>
-    [MaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// Рейтинг
+    /// Ссылка на сервис
     /// </summary>
-    public decimal Rating { get; set; }
+    public string Link { get; set; } = string.Empty;
 
     /// <summary>
     /// Изображение
@@ -32,7 +28,7 @@ public class Topic
     public byte[]? Image { get; set; }
 
     /// <summary>
-    /// Сервисы по подписке
+    /// Тарифы
     /// </summary>
-    public ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+    public ICollection<TariffGetDto>? Tariffs { get; set; }
 }

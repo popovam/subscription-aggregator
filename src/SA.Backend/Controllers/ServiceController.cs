@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SA.Backend.Responses;
 using SA.Domain.Dtos.Service;
-using SA.Infrastructure.Services;
+using SA.Infrastructure.Services.Interfaces;
 using Serilog;
 
 namespace SA.Backend.Controllers;
@@ -13,8 +13,8 @@ namespace SA.Backend.Controllers;
 [ApiController]
 public class ServiceController : ControllerBase
 {
-    private readonly ServService _service;
-    public ServiceController(ServService service)
+    private readonly IServService _service;
+    public ServiceController(IServService service)
     {
         _service = service;
     }

@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using SA.Domain.Entities;
 using SA.Infrastructure.Contexts;
+using SA.Infrastructure.Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace SA.Infrastructure.Repositories;
+namespace SA.Infrastructure.Repositories.Implementations;
 
-/// <summary>
-/// Репозиторий тем
-/// </summary>
-public class TopicRepository : RepositoryBase
+public class TopicRepository : RepositoryBase, ITopicRepository
 {
     public TopicRepository(MainContext context) 
         : base(context)

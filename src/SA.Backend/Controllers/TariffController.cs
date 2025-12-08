@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SA.Backend.Responses;
 using SA.Domain.Dtos.Tariff;
-using SA.Infrastructure.Services;
+using SA.Infrastructure.Services.Interfaces;
 using Serilog;
 
 namespace SA.Backend.Controllers;
@@ -13,8 +13,8 @@ namespace SA.Backend.Controllers;
 [ApiController]
 public class TariffController : ControllerBase
 {
-    private readonly TariffService _service;
-    public TariffController(TariffService service)
+    private readonly ITariffService _service;
+    public TariffController(ITariffService service)
     {
         _service = service;
     }

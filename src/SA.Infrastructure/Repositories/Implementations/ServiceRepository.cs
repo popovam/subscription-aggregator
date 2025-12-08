@@ -1,13 +1,11 @@
 using SA.Domain.Entities;
 using SA.Infrastructure.Contexts;
+using SA.Infrastructure.Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace SA.Infrastructure.Repositories;
+namespace SA.Infrastructure.Repositories.Implementations;
 
-/// <summary>
-/// Репозиторий услуг
-/// </summary>
-public class ServiceRepository : RepositoryBase
+public class ServiceRepository : RepositoryBase, IServiceRepository
 {
     public ServiceRepository(MainContext context) 
         : base(context)

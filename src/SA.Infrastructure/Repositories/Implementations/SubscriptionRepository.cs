@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using SA.Domain.Entities;
 using SA.Infrastructure.Contexts;
+using SA.Infrastructure.Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace SA.Infrastructure.Repositories;
+namespace SA.Infrastructure.Repositories.Implementations;
 
-/// <summary>
-/// Репозиторий сервисов по подписке
-/// </summary>
-public class SubscriptionRepository : RepositoryBase
+public class SubscriptionRepository : RepositoryBase, ISubscriptionRepository
 {
     public SubscriptionRepository(MainContext context) 
         : base(context)

@@ -2,26 +2,29 @@ using AutoMapper;
 using SA.Domain.Dtos.Service;
 using SA.Domain.Entities;
 using SA.Domain.Mapper;
-using SA.Infrastructure.Repositories;
+using SA.Infrastructure.Repositories.Interfaces;
+using SA.Infrastructure.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace SA.Infrastructure.Services;
+namespace SA.Infrastructure.Services.Impementations;
 
-/// <summary>
-/// Сервис услуг
-/// </summary>
-public class ServService
+public class ServService : IServService
 {
-    private readonly TariffRepository _tariffRepository;
+    private readonly ITariffRepository _tariffRepository;
 
-    private readonly ServiceRepository _serviceRepository;
-    public ServService(TariffRepository tariffRepository, ServiceRepository serviceRepository)
+    private readonly IServiceRepository _serviceRepository;
+    
+    private readonly IMapper _mapper;
+
+    public ServService(
+        ITariffRepository tariffRepository,
+        IServiceRepository serviceRepository,
+        MapperProvider mapperProvider)
     {
         _tariffRepository = tariffRepository;
         _serviceRepository = serviceRepository;
+        _mapper = mapperProvider.GetMapper();
     }
-
-    private readonly IMapper _mapper = MapperProvider.Provider.GetMapper();
 
     public ServiceGetDto CreateService(long tariffId, ServiceCreateOrUpdateDto serviceDto)
     {
@@ -85,14 +88,14 @@ public class ServService
             ?? throw new Exception("Тариф не найден.");
     }
 
+    public ServiceGetDto MapToDto(Service service)
+    {
+        return _mapper.Map<ServiceGetDto>(service);
+    }
+
     private Service FindService(long serviceId)
     {
         return _serviceRepository.GetById(serviceId)
             ?? throw new ValidationException($"Услуга не найдена.");
-    }
-
-    public ServiceGetDto MapToDto(Service service)
-    {
-        return _mapper.Map<ServiceGetDto>(service);
     }
 }

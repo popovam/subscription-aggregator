@@ -1,30 +1,15 @@
-using SA.Backend;
-using SA.Infrastructure.Contexts;
+using Microsoft.AspNetCore;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddCors();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<MainContext>();
-builder.Services.AddServices();
-builder.Services.AddRepositoties();
+namespace SA.Backend;
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        BuildWebHost(args).Run();
+    }
+
+    public static IWebHost BuildWebHost(string[] args) => WebHost.CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .Build();
 }
-
-app.UseCors(builder => builder
-    .AllowAnyOrigin()
-    .AllowAnyHeader()
-    .AllowAnyMethod());
-app.UseHttpsRedirection();
-app.UseDeveloperExceptionPage();
-app.UseRouting();
-app.MapControllers();
-
-app.Run();

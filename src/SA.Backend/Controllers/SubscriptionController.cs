@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SA.Backend.Responses;
 using SA.Domain.Dtos.Service;
 using SA.Domain.Dtos.Subscription;
-using SA.Infrastructure.Services;
+using SA.Infrastructure.Services.Interfaces;
 using Serilog;
 
 namespace SA.Backend.Controllers;
@@ -14,8 +14,8 @@ namespace SA.Backend.Controllers;
 [ApiController]
 public class SubscriptionController : ControllerBase
 {
-    private readonly SubscriptionService _service;
-    public SubscriptionController(SubscriptionService service)
+    private readonly ISubscriptionService _service;
+    public SubscriptionController(ISubscriptionService service)
     {
         _service = service;
     }

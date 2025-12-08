@@ -3,37 +3,37 @@ using SA.Domain.Dtos.Service;
 using SA.Domain.Dtos.Subscription;
 using SA.Domain.Entities;
 using SA.Domain.Mapper;
-using SA.Infrastructure.Repositories;
+using SA.Infrastructure.Repositories.Interfaces;
+using SA.Infrastructure.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace SA.Infrastructure.Services;
+namespace SA.Infrastructure.Services.Impementations;
 
-/// <summary>
-/// Сервис подписок
-/// </summary>
-public class SubscriptionService
+public class SubscriptionService : ISubscriptionService
 {
-    private readonly TariffService _tariffService;
+    private readonly ITariffService _tariffService;
 
-    private readonly TopicRepository _topicRepository;
+    private readonly ITopicRepository _topicRepository;
 
-    private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly ISubscriptionRepository _subscriptionRepository;
 
-    private readonly ServiceRepository _serviceRepository;
+    private readonly IServiceRepository _serviceRepository;
+
+    private readonly IMapper _mapper;
 
     public SubscriptionService(
-        TopicRepository topicRepository, 
-        TariffService tariffService, 
-        SubscriptionRepository subscriptionRepository, 
-        ServiceRepository serviceRepository)
+        ITopicRepository topicRepository, 
+        ITariffService tariffService, 
+        ISubscriptionRepository subscriptionRepository, 
+        IServiceRepository serviceRepository,
+        MapperProvider mapperProvider)
     {
         _topicRepository = topicRepository;
         _tariffService = tariffService;
         _subscriptionRepository = subscriptionRepository;
         _serviceRepository = serviceRepository;
+        _mapper = mapperProvider.GetMapper();
     }
-
-    private readonly IMapper _mapper = MapperProvider.Provider.GetMapper();
 
     public SubscriptionGetDto CreateSubscription(long topicId, SubscriptionCreateOrUpdateDto subscriptionDto)
     {
@@ -101,29 +101,6 @@ public class SubscriptionService
         _subscriptionRepository.SaveChanges();
     }
 
-    private List<Subscription> GetFilteredSubscriptions(
-        List<Subscription> subscriptions, 
-        List<ServiceCreateOrUpdateDto> serviceDtos)
-    {
-        List<Service> services = _serviceRepository
-            .GetAll(service => subscriptions
-                .Select(subscription => subscription.Id)
-                .Contains(service.Tariff.Subscription.Id));
-
-        services = services.Where(service => serviceDtos
-            .Select(serviceDto => serviceDto.Name)
-            .Contains(service.Name))
-            .ToList();
-
-        List<Subscription> filteredSubcriptios = services.Where(service => serviceDtos
-            .Select(serviceDto => serviceDto.Value)
-            .Contains(service.Value))
-            .Select(service => service.Tariff.Subscription)
-            .ToList();
-
-        return filteredSubcriptios;
-    }
-
     public Topic FindTopic(long topicId)
     {
         return _topicRepository.GetById(topicId)
@@ -138,5 +115,26 @@ public class SubscriptionService
             .ToList();
 
         return subscriptionDto;
+    }
+
+    private List<Subscription> GetFilteredSubscriptions(
+        List<Subscription> subscriptions,
+        List<ServiceCreateOrUpdateDto> serviceDtos)
+    {
+        List<Service> services;
+        List<Subscription> filteredSubcriptios = new List<Subscription>();
+
+        foreach (var subscription in subscriptions)
+        {
+            services = _serviceRepository
+                .GetAll(service => service.Tariff.Subscription.Id == subscription.Id);
+
+            if (serviceDtos.All(serviceDto =>
+                services.Select(service => service.Name).Contains(serviceDto.Name)
+                && services.Select(service => service.Value).Contains(serviceDto.Value)))
+                filteredSubcriptios.Add(subscription);
+        }
+
+        return filteredSubcriptios;
     }
 }

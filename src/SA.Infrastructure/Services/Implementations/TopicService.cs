@@ -2,26 +2,28 @@ using AutoMapper;
 using SA.Domain.Dtos.Topic;
 using SA.Domain.Entities;
 using SA.Domain.Mapper;
-using SA.Infrastructure.Repositories;
+using SA.Infrastructure.Repositories.Interfaces;
+using SA.Infrastructure.Services.Interfaces;
 
-namespace SA.Infrastructure.Services;
+namespace SA.Infrastructure.Services.Impementations;
 
-/// <summary>
-/// Сервис тем
-/// </summary>
-public class TopicService
+public class TopicService : ITopicService
 {
-    private readonly TopicRepository _topicRepository;
+    private readonly ISubscriptionService _subscriptionService;
 
-    private readonly SubscriptionService _subscriptionService;
+    private readonly ITopicRepository _topicRepository;
 
-    public TopicService(TopicRepository topicRepository, SubscriptionService subscriptionService)
+    private readonly IMapper _mapper;
+
+    public TopicService(
+        ISubscriptionService subscriptionService,
+        ITopicRepository topicRepository, 
+        MapperProvider mapperProvider)
     {
         _topicRepository = topicRepository;
         _subscriptionService = subscriptionService;
+        _mapper = mapperProvider.GetMapper();
     }
-
-    private readonly IMapper _mapper = MapperProvider.Provider.GetMapper();
 
     public TopicGetDto CreateTopic(TopicCreateOrUpdateDto topicDto)
     {

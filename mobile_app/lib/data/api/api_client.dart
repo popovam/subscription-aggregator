@@ -8,12 +8,13 @@ class ApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: Endpoints.baseUrl,
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           "Accept": "application/json",
         },
+        validateStatus: (_) => true,
       ),
     );
   }
@@ -59,11 +60,11 @@ class ApiClient {
 
   Future<Response> getSubscriptions(
     int topicId,
-    List<Map<String, dynamic>> services,
+    List<Map<String, dynamic>> criteria,
   ) {
     return _dio.post(
       Endpoints.subscriptionsAll(topicId),
-      data: services,
+      data: criteria,
     );
   }
 

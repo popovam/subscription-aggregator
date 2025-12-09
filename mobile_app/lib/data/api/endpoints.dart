@@ -1,5 +1,6 @@
 class Endpoints {
-  static const String baseUrl = "http://192.168.0.39:5208";
+  static const String baseUrl = "http://192.168.0.139:5208";
+  // static const String baseUrl = "http://localhost:5208";
 
   //
   // Темы
@@ -42,4 +43,9 @@ class Endpoints {
       "/api/services/all?tariffId=$tariffId";
   static String servicesUpdate(int id) => "/api/services/$id";
   static String servicesDelete(int id) => "/api/services/$id";
+
+  //
+  // Сравнительная таблица
+  //
+  static const String comparison = "/api/comparison";
 }

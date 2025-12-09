@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobile_app/data/models/tariff.dart';
+import 'tariff.dart';
 
 class Subscription extends Equatable {
   final int id;
@@ -21,12 +21,12 @@ class Subscription extends Equatable {
 
   factory Subscription.fromJson(Map<String, dynamic> json) {
     return Subscription(
-      id: json['id'],
-      name: json['name'],
-      link: json['link'],
-      image: json['image'],
-      tariffs: (json['tariffs'] as List)
-          .map((t) => Tariff.fromJson(t))
+      id: json['id'] ?? json['Id'] ?? 0,
+      name: json['name'] ?? json['Name'] ?? "",
+      link: json['link'] ?? json['Link'] ?? "",
+      image: json['image'] ?? json['Image'],
+      tariffs: (json['tariffs'] ?? json['Tariffs'] ?? [])
+          .map<Tariff>((t) => Tariff.fromJson(t))
           .toList(),
     );
   }
@@ -35,9 +35,19 @@ class Subscription extends Equatable {
     return {
       'id': id,
       'name': name,
-      'link': link,
+      'price': link,
       'image': image,
-      'tariffs': tariffs.map((t) => t.toJson()).toList(),
+      'tariffs': tariffs.map((s) => s.toJson()).toList(),
     };
+  }
+
+  Subscription copyWith({List<Tariff>? tariffs}) {
+    return Subscription(
+      id: id,
+      name: name,
+      link: link,
+      image: image,
+      tariffs: tariffs ?? this.tariffs,
+    );
   }
 }

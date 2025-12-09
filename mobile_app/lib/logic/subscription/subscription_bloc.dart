@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/data/repository/subscription_repository.dart';
+import 'package:mobile_app/data/topic_manager.dart';
 import 'subscription_event.dart';
 import 'subscription_state.dart';
 
@@ -20,12 +21,16 @@ class SubscriptionBloc
     Emitter<SubscriptionState> emit,
   ) async {
     emit(SubscriptionLoading());
+
     try {
       final items = await repo.getSubscriptions(
         event.topicId,
-        event.filters,
+        [],
       );
-      emit(SubscriptionsLoaded(items));
+
+      TopicFilterManager().setAll(items);
+
+      emit(SubscriptionsLoaded(TopicFilterManager().current));
     } catch (e) {
       emit(SubscriptionError(e.toString()));
     }

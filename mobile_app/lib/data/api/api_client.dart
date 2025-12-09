@@ -8,12 +8,13 @@ class ApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: Endpoints.baseUrl,
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           "Accept": "application/json",
         },
+        validateStatus: (_) => true,
       ),
     );
   }
@@ -59,11 +60,11 @@ class ApiClient {
 
   Future<Response> getSubscriptions(
     int topicId,
-    List<Map<String, dynamic>> services,
+    List<Map<String, dynamic>> criteria,
   ) {
     return _dio.post(
       Endpoints.subscriptionsAll(topicId),
-      data: services,
+      data: criteria,
     );
   }
 
@@ -143,5 +144,25 @@ class ApiClient {
 
   Future<Response> deleteService(int id) {
     return _dio.delete(Endpoints.servicesDelete(id));
+  }
+
+  //
+  // Сравнительная таблица
+  //
+  Future<Map<String, dynamic>> postComparison(
+    Map<String, dynamic> body,
+  ) async {
+    final response = await _dio.post(
+      Endpoints.comparison,
+      data: body,
+    );
+
+    final data = response.data;
+
+    if (data is Map<String, dynamic>) {
+      return data;
+    }
+
+    throw Exception("Ошибка сравнительной таблицы");
   }
 }

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobile_app/data/models/service.dart';
+import 'service.dart';
 
 class Tariff extends Equatable {
   final int id;
@@ -19,11 +19,11 @@ class Tariff extends Equatable {
 
   factory Tariff.fromJson(Map<String, dynamic> json) {
     return Tariff(
-      id: json['id'],
-      name: json['name'],
-      price: (json['price'] as num).toDouble(),
-      services: (json['services'] as List)
-          .map((s) => Service.fromJson(s))
+      id: json['id'] ?? json['Id'] ?? 0,
+      name: json['name'] ?? json['Name'] ?? "",
+      price: (json['price'] ?? json['Price'] ?? 0).toDouble(),
+      services: (json['services'] ?? json['Services'] ?? [])
+          .map<Service>((s) => Service.fromJson(s))
           .toList(),
     );
   }
@@ -33,7 +33,16 @@ class Tariff extends Equatable {
       'id': id,
       'name': name,
       'price': price,
-      'services': services.map((s) => s.toJson()).toList(),
+      'services': services.map((s) => s.toFilterJson()).toList(),
     };
+  }
+
+  Tariff copyWith({List<Service>? services}) {
+    return Tariff(
+      id: id,
+      name: name,
+      price: price,
+      services: services ?? this.services,
+    );
   }
 }

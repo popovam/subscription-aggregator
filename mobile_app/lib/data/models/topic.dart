@@ -27,13 +27,14 @@ class Topic extends Equatable {
 
   factory Topic.fromJson(Map<String, dynamic> json) {
     return Topic(
-      id: json['id'],
-      name: json['name'],
-      rating: (json['rating'] as num).toDouble(),
-      image: json['image'],
-      subscriptions: (json['subscriptions'] as List)
-          .map((s) => Subscription.fromJson(s))
-          .toList(),
+      id: json['id'] ?? json['Id'] ?? 0,
+      name: json['name'] ?? json['Name'] ?? "",
+      rating: (json['rating'] ?? 0).toDouble(),
+      image: json['image'] ?? json['Image'],
+      subscriptions:
+          (json['subscriptions'] ?? json['Subscriptions'] ?? [])
+              .map<Subscription>((s) => Subscription.fromJson(s))
+              .toList(),
     );
   }
 

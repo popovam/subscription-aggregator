@@ -1,5 +1,6 @@
 class Endpoints {
-  static const String baseUrl = "http://192.168.0.39:5208";
+  static const String baseUrl = "http://192.168.0.139:5208";
+  // static const String baseUrl = "http://localhost:5208";
 
   //
   // Темы

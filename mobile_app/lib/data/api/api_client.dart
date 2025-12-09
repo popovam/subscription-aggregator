@@ -145,4 +145,24 @@ class ApiClient {
   Future<Response> deleteService(int id) {
     return _dio.delete(Endpoints.servicesDelete(id));
   }
+
+  //
+  // Сравнительная таблица
+  //
+  Future<Map<String, dynamic>> postComparison(
+    Map<String, dynamic> body,
+  ) async {
+    final response = await _dio.post(
+      Endpoints.comparison,
+      data: body,
+    );
+
+    final data = response.data;
+
+    if (data is Map<String, dynamic>) {
+      return data;
+    }
+
+    throw Exception("Ошибка сравнительной таблицы");
+  }
 }

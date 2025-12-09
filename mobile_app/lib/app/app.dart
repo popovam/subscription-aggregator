@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mobile_app/ui/pages/comparative_criteria_page.dart';
 import 'package:mobile_app/ui/pages/comparative_page.dart';
 import 'package:mobile_app/ui/pages/criteria_page.dart';
@@ -36,8 +35,7 @@ class MyApp extends StatelessWidget {
           return CriteriaPage(topicId: args["topicId"]);
         },
         "/table": (context) => ComparisonPage(),
-        "/table_criteria": (context) =>
-            CriteriaPageForComparison(),
+        "/table_criteria": (context) => ComparisonCriteriaPage(),
       },
     );
   }

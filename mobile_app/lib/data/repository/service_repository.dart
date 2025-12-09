@@ -1,5 +1,6 @@
 import 'package:mobile_app/data/api/api_client.dart';
 import 'package:mobile_app/data/models/service.dart';
+import 'package:mobile_app/data/repository/parser.dart';
 
 class ServiceRepository {
   final ApiClient api;
@@ -8,7 +9,9 @@ class ServiceRepository {
 
   Future<List<Service>> getServices(int tariffId) async {
     final response = await api.getServices(tariffId);
-    final list = response.data['entities'] as List? ?? [];
+    final data = parse(response.data);
+
+    final list = data['entities'] as List? ?? [];
     return list.map((e) => Service.fromJson(e)).toList();
   }
 
@@ -20,8 +23,9 @@ class ServiceRepository {
       tariffId,
       service.toJson(),
     );
-    final json = response.data['entity'];
-    return Service.fromJson(json);
+    final data = parse(response.data);
+
+    return Service.fromJson(data['entity'] ?? {});
   }
 
   Future<Service> updateService(int id, Service service) async {
@@ -29,8 +33,9 @@ class ServiceRepository {
       id,
       service.toJson(),
     );
-    final json = response.data['entity'];
-    return Service.fromJson(json);
+    final data = parse(response.data);
+
+    return Service.fromJson(data['entity'] ?? {});
   }
 
   Future<void> deleteService(int id) async {

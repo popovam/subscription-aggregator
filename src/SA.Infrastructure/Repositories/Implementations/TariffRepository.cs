@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using SA.Domain.Entities;
 using SA.Infrastructure.Contexts;
+using SA.Infrastructure.Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace SA.Infrastructure.Repositories;
+namespace SA.Infrastructure.Repositories.Implementations;
 
-/// <summary>
-/// Репозиторий тарифов
-/// </summary>
-public class TariffRepository : RepositoryBase
+public class TariffRepository : RepositoryBase, ITariffRepository
 {
     public TariffRepository(MainContext context) 
         : base(context)

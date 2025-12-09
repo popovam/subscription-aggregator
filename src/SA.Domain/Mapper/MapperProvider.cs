@@ -5,8 +5,6 @@ namespace SA.Domain.Mapper;
 
 public class MapperProvider
 {
-    public static readonly MapperProvider Provider = new MapperProvider();
-
     private static IMapper _mapper;
 
     public MapperProvider()

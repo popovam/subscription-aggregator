@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SA.Backend.Responses;
 using SA.Domain.Dtos.Topic;
-using SA.Infrastructure.Services;
+using SA.Infrastructure.Services.Interfaces;
 using Serilog;
 
 namespace SA.Backend.Controllers;
@@ -13,8 +13,8 @@ namespace SA.Backend.Controllers;
 [ApiController]
 public class TopicController : ControllerBase
 {
-    private readonly TopicService _service;
-    public TopicController(TopicService service)
+    private readonly ITopicService _service;
+    public TopicController(ITopicService service)
     {
         _service = service;
     }

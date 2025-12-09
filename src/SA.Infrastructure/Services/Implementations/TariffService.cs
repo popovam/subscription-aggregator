@@ -1,35 +1,34 @@
 using AutoMapper;
-using SA.Domain.Dtos.Service;
 using SA.Domain.Dtos.Tariff;
 using SA.Domain.Entities;
 using SA.Domain.Mapper;
-using SA.Infrastructure.Repositories;
+using SA.Infrastructure.Repositories.Interfaces;
+using SA.Infrastructure.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace SA.Infrastructure.Services;
+namespace SA.Infrastructure.Services.Impementations;
 
-/// <summary>
-/// Сервис тарифов
-/// </summary>
-public class TariffService
+public class TariffService : ITariffService
 {
-    private readonly ServService _servService;
+    private readonly IServService _servService;
 
-    private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly ISubscriptionRepository _subscriptionRepository;
 
-    private readonly TariffRepository _tariffRepository;
+    private readonly ITariffRepository _tariffRepository;
+
+    private readonly IMapper _mapper;
 
     public TariffService(
-        ServService servService,
-        SubscriptionRepository subscriptionRepository, 
-        TariffRepository tariffRepository)
+        IServService servService,
+        ISubscriptionRepository subscriptionRepository, 
+        ITariffRepository tariffRepository,
+        MapperProvider mapperProvider)
     {
         _servService = servService;
         _subscriptionRepository = subscriptionRepository;
         _tariffRepository = tariffRepository;
+        _mapper = mapperProvider.GetMapper();
     }
-
-    private readonly IMapper _mapper = MapperProvider.Provider.GetMapper();
 
     public TariffGetDto CreateTariff(long subscriptionId, TariffCreateOrUpdateDto tariffDto)
     {

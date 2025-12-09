@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/data/api/api_client.dart';
 import 'package:mobile_app/data/models/service.dart';
 import 'package:mobile_app/data/repository/subscription_repository.dart';
+import 'package:mobile_app/data/topic_manager.dart';
 import 'package:mobile_app/logic/subscription/subscription_bloc.dart';
 import 'package:mobile_app/logic/subscription/subscription_event.dart';
 import 'package:mobile_app/logic/subscription/subscription_state.dart';
@@ -45,17 +46,18 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        CriteriaPage(topicId: topicId),
+                    builder: (_) => CriteriaPage(
+                      topicId: topicId,
+                      initiallySelected: selectedServices,
+                    ),
                   ),
                 );
 
                 if (result != null && result is List<Service>) {
-                  setState(() {
-                    selectedServices = result;
-                  });
+                  selectedServices = result;
+                  TopicFilterManager().apply(result);
+                  setState(() {});
 
-                  // повторно загружаем сервисы с фильтрами
                   context.read<SubscriptionBloc>().add(
                     GetSubscriptions(topicId, selectedServices),
                   );
@@ -84,22 +86,21 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             }
 
             if (state is SubscriptionsLoaded) {
-              if (state.subs.isEmpty) {
-                return const Center(
+              final list = TopicFilterManager().current;
+
+              if (list.isEmpty) {
+                return Center(
                   child: Text(
                     "Нет сервисов по выбранным критериям",
-                    style: TextStyle(fontSize: 18),
                   ),
                 );
               }
 
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: state.subs.length,
+                itemCount: list.length,
                 itemBuilder: (_, i) {
-                  return SubscriptionCard(
-                    subscription: state.subs[i],
-                  );
+                  return SubscriptionCard(subscription: list[i]);
                 },
               );
             }

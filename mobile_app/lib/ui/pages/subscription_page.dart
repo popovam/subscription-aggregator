@@ -101,6 +101,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               ),
               const SizedBox(height: 10),
 
+              // ignore: unnecessary_null_comparison
               if (currentTariff!.price != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(

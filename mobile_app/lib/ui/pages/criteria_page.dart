@@ -5,7 +5,12 @@ import 'package:mobile_app/data/repository/subscription_repository.dart';
 
 class CriteriaPage extends StatefulWidget {
   final int topicId;
-  const CriteriaPage({super.key, required this.topicId});
+  final List<Service> initiallySelected;
+  const CriteriaPage({
+    super.key,
+    this.initiallySelected = const [],
+    required this.topicId,
+  });
 
   @override
   State<CriteriaPage> createState() => _CriteriaPageState();
@@ -22,18 +27,25 @@ class _CriteriaPageState extends State<CriteriaPage> {
     load();
   }
 
+  String makeKey(Service s) => s.key;
+
   Future<void> load() async {
     final repo = SubscriptionRepository(ApiClient());
     final subs = await repo.getSubscriptions(widget.topicId, []);
 
     final Map<String, (Service, bool)> result = {};
 
+    final initially = widget.initiallySelected
+        .map((s) => makeKey(s))
+        .toSet();
+
     for (final sub in subs) {
       for (final t in sub.tariffs) {
         for (final s in t.services) {
-          final key =
-              "${normalize(s.name)}::${normalize(s.value)}";
-          result[key] = (s, false);
+          final key = makeKey(s);
+          final selected = initially.contains(key);
+
+          result[key] = (s, selected);
         }
       }
     }
@@ -54,10 +66,7 @@ class _CriteriaPageState extends State<CriteriaPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Критерии"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Критерии")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -72,6 +81,8 @@ class _CriteriaPageState extends State<CriteriaPage> {
                       (key, v) => (v.$1, false),
                     );
                   });
+
+                  Navigator.pop(context, <Service>[]);
                 },
               ),
             ),
@@ -101,6 +112,7 @@ class _CriteriaPageState extends State<CriteriaPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                child: const Text("Применить"),
                 onPressed: () {
                   final chosen = criteria.values
                       .where((v) => v.$2)
@@ -109,7 +121,6 @@ class _CriteriaPageState extends State<CriteriaPage> {
 
                   Navigator.pop(context, chosen);
                 },
-                child: const Text("Применить"),
               ),
             ),
           ],

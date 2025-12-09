@@ -43,4 +43,9 @@ class Endpoints {
       "/api/services/all?tariffId=$tariffId";
   static String servicesUpdate(int id) => "/api/services/$id";
   static String servicesDelete(int id) => "/api/services/$id";
+
+  //
+  // Сравнительная таблица
+  //
+  static const String comparison = "/api/comparison";
 }

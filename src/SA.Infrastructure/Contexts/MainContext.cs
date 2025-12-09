@@ -41,15 +41,22 @@ public class MainContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .AddJsonFile("D:\\Repos\\subscription-aggregator\\src\\SA.Infrastructure\\appsettings.json")
-            .Build();
+        if (!optionsBuilder.IsConfigured)
+        {
+            var basePath = Directory.GetCurrentDirectory();
 
-        var connectionString = configuration.GetConnectionString("Database")
-            ?? throw new Exception("Не удалось найти строку подключения.");
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(basePath)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .Build();
 
-        optionsBuilder.UseNpgsql(connectionString);
-        optionsBuilder.UseSnakeCaseNamingConvention();
+            var connectionString = configuration.GetConnectionString("Database")
+                ?? throw new Exception("Не удалось найти строку подключения.");
+
+            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseSnakeCaseNamingConvention();
+        }
 
         base.OnConfiguring(optionsBuilder);
     }
